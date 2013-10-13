@@ -5,17 +5,20 @@ var LOAN_DIR = 'loans/';
 var repo = {
 
     gatherAll : function(dir, fileInfo) {
-	repo.fetch('lib/codo.js', function rowsAndLines(data) {
-	    // console.log(data);
+	repo.fetch('lib/codo.js', repo.processLine(fileInfo));
+    },
 
-	    var regex = new RegExp("^\\s+");
-	    var result = data.match(regex);
-	    var numberOfWhitespace = 0;
-	    if (result !== null) {
-		numberOfWhitespace = result.length;
-	    }
-	    console.log("W: " + data.length + " WS: " + numberOfWhitespace);
-	});
+    processLine : function(data, lineInfo) {
+	var regex = new RegExp("^\\s+");
+	var result = data.match(regex);
+	var numberOfWhitespace = 0;
+	if (result !== null) {
+	    numberOfWhitespace = result[0].length;
+	}
+	
+	lineInfo.push(numberOfWhitespace);
+	lineInfo.push(data.length);
+	// console.log("W: " + data.length + " WS: " + numberOfWhitespace);
     },
 
     toDisk : function(application, id) {

@@ -8,17 +8,22 @@ var codo = {
 
     serveResult : function(response) {
 	return function printFetched(application) {
-	    console.log('KESO');
+
 	}
     },
 
-    launch : function launcher(repo, returnResult, dir) {
-	repo.gatherAll(dir);
-	returnResult('ARNE')();
+    launch : function launcher(repo, returnResult, args) {
+	    if (args.length < 4) {
+		console.log("Usage: node codo.js [sourcedir] [outputdir]");
+	    } else {
+		var dir = args[2];
+		repo.gatherAll(dir);
+	    }
 
+	// returnResult('ARNE')();
     }
 }
 
-var srv = codo.launch(harvester, codo.serveResult, ".");
+var srv = codo.launch(harvester, codo.serveResult, process.argv);
 
 module.exports = codo;
