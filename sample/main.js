@@ -5,14 +5,20 @@
 	var particleSystem;
 
     var that = {
-	init:function(system){
+	data : {
+	    'a' : [[0, 20], [0, 45], [4, 40], [4, 20], [0, 30]],
+	    'b' : [[0, 10], [0, 15], [4, 20], [4, 30], [0, 37]],
+	    'c' : [[0, 20], [4, 45], [8, 40], [8, 20], [4, 3]],
+	},
+
+	init : function(system){
             particleSystem = system;
             particleSystem.screenSize(canvas.width, canvas.height);
             particleSystem.screenPadding(80);
             that.initMouseHandling();
       },
       
-      redraw:function(){
+      redraw : function() {
           ctx.fillStyle = "white"
           ctx.fillRect(0,0, canvas.width, canvas.height)
           
@@ -31,12 +37,11 @@
 	drawNode : function(node, pt){
 	    // console.log(node.name);
 	    
-	    var layout = [[0, 20], [0, 45], [4, 40], [4, 20], [0, 30]];
-
-            var w = 4;
+	    var layout = that.data[node.name] || [[0, 4]];
+	    
             ctx.fillStyle = (node.data.alone) ? "orange" : "black"
 	    
-	    var lineHeight = 4
+	    var lineHeight = 2;
 	    for (var i = 0; i < layout.length; i++) {
 		var row = layout[i];
 		ctx.fillRect(pt.x + row[0], pt.y + i * lineHeight, row[1], lineHeight);
@@ -102,7 +107,7 @@
       sys.graft({
 	  nodes:{
               f:{alone:true, mass:.25}
-        }, 
+          }, 
           edges:{
               a:{ b:{},
 		  c:{},
