@@ -4,11 +4,50 @@ var LOAN_DIR = 'loans/';
 
 var repo = {
 
-    gatherAll : function(dir, fileInfo) {
-	repo.fetch('lib/codo.js', repo.processLine(fileInfo));
+    gatherAll : function(dir, dataCallback, fileType) {
+	repo.processDir(dir, dataCallback, fileType);
     },
 
-    processLine : function(data, lineInfo) {
+    processDir : function(dir, dataCallback, fileType) {
+	fs.readdir(dir, function (err, data) {
+	    if (data) {
+		for (var i = 0; i < data.length; i++) {
+		    var next = dir + '/' + data[i];
+		    if (next !== '.' && next !== '..' && fs.existsSync(next)) {
+			var stat = fs.statSync(next);
+			if (stat.isDirectory() && !stat.isSymbolicLink()) {
+			    repo.processDir(next, dataCallback, fileType);
+			} else if (stat.isFile() && 
+				   !stat.isSymbolicLink() &&
+				   repo.passes(next, fileType)
+				  ) {
+	
+			    repo.processFile(next, dataCallback);
+			}
+		    }
+		}
+	    }
+	});
+    },
+
+    passes : function(file, filter) {
+	return file.substr(-filter.length) === filter;
+    },
+
+    processFile : function(file, callback) {
+	fs.readFile(file, function read(err, data) {
+	    var lines = data.toString().split('\n');
+	    var fi = {fileName : file,
+		      lines : []
+		     };
+	    for (var i = 0; i < lines.length; i++) {
+		fi.lines.push(repo.processLine(lines[i]));
+	    }
+	    callback(fi);
+	});
+    },
+
+    processLine : function processLine(data) {
 	var regex = new RegExp("^\\s+");
 	var result = data.match(regex);
 	var numberOfWhitespace = 0;
@@ -16,70 +55,7 @@ var repo = {
 	    numberOfWhitespace = result[0].length;
 	}
 	
-	lineInfo.push(numberOfWhitespace);
-	lineInfo.push(data.length);
-	// console.log("W: " + data.length + " WS: " + numberOfWhitespace);
-    },
-
-    toDisk : function(application, id) {
-	application.approved = false;
-	application.applicationNo = id;
-	fs.writeFile(LOAN_DIR + id + '.data', 
-		     JSON.stringify(application),
-		     function(err) {
-			 if (err) {
-			     throw err;
-			 } else {
-			     console.log('Stored');
-			 }
-		     });
-    },
-
-    store : function (application, callback) {
-	fs.readdir('loans/', repo.determineNextId(application, callback, repo));
-    },
-
-    determineNextId : function(application, callback, repo) {
-	return function(err, data) {
-	    if (err) {
-		throw err;
-	    } else {
-		var id = data.length + 1;
-		repo.toDisk(application, id);
-		callback(JSON.stringify({ticketId: id}));
-	    }
-	}
-    },
-
-
-    approve : function(ticketId, callback) {
-	fs.readFile(
-	    LOAN_DIR + ticketId + '.data', 
-	    function(err, data) {
-		if (err) {
-		    throw err;
-		} else {
-		    var application = JSON.parse(data);
-		    application.approved = true;
-		    fs.writeFile(
-			LOAN_DIR + application.applicationNo + '.data',
-			JSON.stringify(application),
-			this.doneWriting);
-		    callback(JSON.stringify(
-			{ticketId: application.applicationNo}
-		    ));
-		}	 
-	    });
-    },
-
-    fetch : function(file, callback) {
-	
-	var data = fs.readFileSync(file);
-	
-	data.toString().split('\n').forEach(
-	    function every(line) {
-		callback(line);
-	    });
+	return [numberOfWhitespace, data.length - numberOfWhitespace];
     }
 }
 	

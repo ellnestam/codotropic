@@ -13,13 +13,16 @@ var codo = {
     },
 
     launch : function launcher(repo, returnResult, args) {
-	    if (args.length < 4) {
-		console.log("Usage: node codo.js [sourcedir] [outputdir]");
-	    } else {
-		var dir = args[2];
-		repo.gatherAll(dir);
-	    }
-
+	if (args.length < 4) {
+	    console.log("Usage: node codo.js [sourcedir] [outputdir]");
+	} else {
+	    var dir = args[2];
+	    var fi = function(info) {
+		console.log(info);
+	    };
+	    repo.gatherAll(dir, fi, ".js");
+	}
+	
 	// returnResult('ARNE')();
     }
 }
