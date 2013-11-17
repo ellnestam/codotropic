@@ -8,9 +8,16 @@ exports['Harvester'] = {
     },
     'Whitespace and length is processed': function(test) {
 	var line = "        dede ded";
-	var lineInfo = [];
-	harvester.processLine(line, lineInfo);
-	test.equals([8, 16], lineInfo);
+	var lineInfo = harvester.processLine(line);
+	test.deepEqual([8, 8], lineInfo);
 	test.done();
     },
+
+    'Parent is added': function(test) {
+	var line = "        dede ded";
+	var lineInfo = harvester.processFile(line);
+	test.deepEqual([8, 8], lineInfo);
+	test.done();
+    },
+
 };

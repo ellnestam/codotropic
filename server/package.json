@@ -2,7 +2,7 @@
   "name": "cocotropic",
   "description": "Generates a Codotropic view of a directory structure",
   "version": "0.1.0",
-  "homepage": "https://github.com/ellnestam/mik-loan",
+  "homepage": "https://github.com/ellnestam/codotropic",
   "author": {
     "name": "Ola Ellnestam",
     "email": "ola@agical.se"
@@ -20,13 +20,16 @@
       "url": "https://github.com/ellnestam/codotropic/blob/master/LICENSE-MIT"
     }
   ],
-  "main": "lib/codotropic",
+  "main": "server/lib/codo.js",
   "engines": {
     "node": ">= 0.8.0"
   },
   "scripts": {
     "test": "grunt nodeunit"
   },
+    "dependencies": {
+	"q": "*"
+    },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.6.4",
     "grunt-contrib-nodeunit": "~0.2.0",
