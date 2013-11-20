@@ -7,8 +7,17 @@ exports['Repo'] = {
 	done();
     },
     'Structure from name': function(test) {
-	var process = repo.createRead('lib/source/repo_test.js');
-	process.done();
-	test.done();
+	var process = repo.createRead('lib/source1/repo.js');
+	process.then(
+	    function(data) {
+		console.log(data);
+		test.done();
+	    },
+	    function(err) {
+		console.error(err);
+	    }
+	);
+
+	test.equals("de", "de");
     },
 };
