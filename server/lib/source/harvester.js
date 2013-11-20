@@ -20,9 +20,7 @@ var repo = {
 			    repo.processDir(fileOrDir, dataCallback, fileType);
 			} else if (stat.isFile() && 
 				   !stat.isSymbolicLink() &&
-				   repo.passes(fileOrDir, fileType)
-				  ) {
-	
+				   repo.passes(fileOrDir, fileType)) {
 			    repo.processFile(fileOrDir, dataCallback);
 			}
 		    }
@@ -57,7 +55,6 @@ var repo = {
     processLine : function processLine(data) {
 	var regex = new RegExp("^\\s+");
 	var result = data.match(regex);
-	// console.log(result[0].length);
 	var numberOfWhitespace = 0;
 	if (result !== null) {
 	    numberOfWhitespace = result[0].length;
