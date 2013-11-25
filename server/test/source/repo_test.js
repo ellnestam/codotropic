@@ -7,10 +7,10 @@ exports['Repo'] = {
 	done();
     },
     'Structure from name': function(test) {
-	var process = repo.createRead('lib/source1/repo.js');
-	process.then(
+	var readFile = repo.createRead('test/example.file');
+	readFile.then(
 	    function(data) {
-		console.log(data);
+		// console.log(data);
 		test.done();
 	    },
 	    function(err) {
@@ -20,4 +20,14 @@ exports['Repo'] = {
 
 	test.equals("de", "de");
     },
+
+    'Read Dir' : function(test) {
+	var readDir = repo.createProcessDir('.');
+	readDir.then( repo.doIt(), 
+		      function(error) {
+			  console.log(error);
+		      }).done();
+	test.done();
+    }
+
 };
