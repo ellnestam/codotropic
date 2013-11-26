@@ -28,28 +28,25 @@ var repo = {
 		deferred.resolve(data);
 	    }
 	});
+
 	return deferred.promise;
     },
 
-    doIt : function() {
-
+    doIt : function(collect) {
 	return function(files) {
             var promises = [];
-	
+
             for ( var i = 0; i < files.length; i++ ) {
-		promises.push( repo.createRead( files[i] ) );
+		
+		repo.createRead( files[i] ).then(
+		    collect,
+		    console.log
+		);
             }
 	
-	    q.all( promises ).then( function(results) {
-		console.log(results + ' 222');
-		var totalBytes = 0;
-		for ( i = 0; i < results.length; i++ ) {
-                    totalBytes += results[i].length;
-		}
-		console.log("Done reading files. totalBytes = " + totalBytes);
-            }, function( error ) {
-		console.log("Error reading files");
-            });
+	    // Q.all(promises).then(console.log);
+
+	    return promises;
 	};
     }
 

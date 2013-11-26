@@ -1,6 +1,7 @@
 'use strict';
 
 var repo = require('../../lib/source/repo.js');
+var q = require('q');
 
 exports['Repo'] = {
     setUp: function(done) {
@@ -23,10 +24,16 @@ exports['Repo'] = {
 
     'Read Dir' : function(test) {
 	var readDir = repo.createProcessDir('.');
-	readDir.then( repo.doIt(), 
-		      function(error) {
-			  console.log(error);
-		      }).done();
+	var res = readDir.then( repo.doIt() );
+
+	var result = q('');
+	
+	res.then(function(result) {
+	    result.then(function(res) {
+		console.log(res);
+	    });
+	});
+
 	test.done();
     }
 
