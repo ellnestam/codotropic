@@ -32,21 +32,29 @@ var repo = {
 	return deferred.promise;
     },
 
+
+    statIt : function(fileOrDir) {
+	var deferred = q.defer();
+	fs.stat(fileOrDir, deferred.node());
+	return defered.promise();
+    },
+
     doIt : function(collect) {
 	return function(files) {
-            var promises = [];
 
             for ( var i = 0; i < files.length; i++ ) {
-		
-		repo.createRead( files[i] ).then(
-		    collect,
-		    console.log
-		);
-            }
-	
-	    // Q.all(promises).then(console.log);
+		// var stat = statIt(files[i]);
 
-	    return promises;
+		var stat = fs.stat(files[i], function(err, stats) {
+		    if (err) throw err;
+		    console.log('Dir ' + stats.isDirectory());
+		});
+		console.log('Stat: ' + stat);
+		// console.log(stat.isDir())
+		
+
+		repo.createRead(files[i]).then(collect, console.error);
+            }
 	};
     }
 
