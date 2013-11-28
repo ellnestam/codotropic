@@ -13,9 +13,16 @@ var codo = {
 	}
 
 	var readDir = repo.createProcessDir('.');
-	var res = readDir.then( repo.doIt(collect), function(error) {
-	    console.error('Error out: ' + error);
-	} );
+	var res = readDir.then( 
+	    repo.doIt(collect), 
+	    this.error
+	).done();
+
+
+    },
+
+    error : function error(e) {
+	console.error('Error out: ' + error);
     }
 }
 

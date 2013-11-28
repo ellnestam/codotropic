@@ -35,27 +35,38 @@ var repo = {
 
     statIt : function(fileOrDir) {
 	var deferred = q.defer();
-	fs.stat(fileOrDir, deferred.node());
-	return defered.promise();
+	fs.stat(fileOrDir, function(error, data) {
+	    if (error) {
+		deferred.reject(new Error(error));
+	    } else {
+		deferred.resolve(data.isDirectory() && !data.isSymbolicLink());
+	    }
+	});
+	
+	return deferred.promise;
     },
 
     doIt : function(collect) {
 	return function(files) {
-
+	    var promises = [];
+	    
             for ( var i = 0; i < files.length; i++ ) {
-		// var stat = statIt(files[i]);
+		var fileOrDir = files[i];
 
-		var stat = fs.stat(files[i], function(err, stats) {
-		    if (err) throw err;
-		    console.log('Dir ' + stats.isDirectory());
-		});
-		console.log('Stat: ' + stat);
-		// console.log(stat.isDir())
-		
-
-		repo.createRead(files[i]).then(collect, console.error);
+		q.when(repo.statIt(fileOrDir), 
+		       function(isDir) {
+			   console.log('Is dir?: ' + isDir);
+			   if (!isDir) {
+			       promises.push(repo.createRead(fileOrDir));
+			   }
+		       },
+		       console.log
+		      );
+		promises.push(repo.createRead(fileOrDir));
             }
 	};
+	
+	return promises;
     }
 
     
