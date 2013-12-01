@@ -10,7 +10,7 @@ var repo = {
 	var deferred = q.defer();
 	fs.readFile(fileName, "utf-8", function (error, text) {	    
 	    if (error) {
-		deferred.reject(new Error(error));
+		deferred.reject(new Error(error + '. Cannot read file: ' + fileName));
 	    } else {
 		deferred.resolve(text);
 	    }
@@ -21,11 +21,11 @@ var repo = {
 
     createProcessDir: function(dir) {
 	var deferred = q.defer();
-	fs.readdir(dir, function(error, data) {
+	fs.readdir(dir, function(error, files) {
 	    if (error) {
-		deffered.reject(new Error(error));
+		deferred.reject(new Error('Cannot process dir: ' + dir + ' ' + error));
 	    } else {
-		deferred.resolve(data);
+		deferred.resolve(files);
 	    }
 	});
 
@@ -37,40 +37,50 @@ var repo = {
 	var deferred = q.defer();
 	fs.stat(fileOrDir, function(error, data) {
 	    if (error) {
-		deferred.reject(new Error(error));
+		deferred.reject(new Error("Cannot stat " + error));
 	    } else {
-		deferred.resolve(data.isDirectory() && !data.isSymbolicLink());
+		deferred.resolve(data);
 	    }
 	});
 	
 	return deferred.promise;
     },
 
-    doIt : function(collect) {
-	return function(files) {
-	    var promises = [];
-	    
-            for ( var i = 0; i < files.length; i++ ) {
-		var fileOrDir = files[i];
+    map : function (arr, iterator) {
+	var promises = arr.map(function (element) {
+	    return iterator(element) 
+	});
 
-		q.when(repo.statIt(fileOrDir), 
-		       function(isDir) {
-			   console.log('Is dir?: ' + isDir);
-			   if (!isDir) {
-			       promises.push(repo.createRead(fileOrDir));
-			   }
-		       },
-		       console.log
-		      );
-		promises.push(repo.createRead(fileOrDir));
-            }
-	};
+	return q.all(promises);
+    },
+
+    fileOrDir : function(fileOrDir) {
+	var fs_stat = q.nfbind(fs.stat);
+
+	var p = fs_stat(fileOrDir).then(function (data) {
+	    if (data.isDirectory()) {
+		console.log('Dir: ' + fileOrDir);
+		return repo.createProcessDir(fileOrDir);
+	    } else {
+		console.log('File: ' + fileOrDir);
+		return repo.createRead(fileOrDir);
+	    }
+	}, console.error);
 	
-	return promises;
+	return p;
+    },
+
+    doIt : function(dir) {
+	var promises = [];
+
+	fs.readdir(dir, function(error, files) {
+	    promises.push( repo.map(files, repo.fileOrDir) );
+	});
+		   
+	// console.log('Promises: ' + promises.length);
+	return q.all(promises);
     }
-
-    
-
+	      
 };
 
 

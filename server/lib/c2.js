@@ -12,17 +12,13 @@ var codo = {
 	    console.log('Data: ');
 	}
 
-	var readDir = repo.createProcessDir('.');
-	var res = readDir.then( 
-	    repo.doIt(collect), 
-	    this.error
-	).done();
+	var readDir = repo.doIt('.');
 
-
+	readDir.then(collect, this.error).done();
     },
 
     error : function error(e) {
-	console.error('Error out: ' + error);
+	console.error('Error out: ' + e);
     }
 }
 
