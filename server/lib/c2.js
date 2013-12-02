@@ -9,7 +9,7 @@ var codo = {
 
     launch : function launcher() {
 	var collect = function(data) {
-	    console.log('Data: ');
+	    console.log('Data: ' + data);
 	}
 
 	var readDir = repo.doIt('.');

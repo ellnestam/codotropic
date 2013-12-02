@@ -32,20 +32,6 @@ var repo = {
 	return deferred.promise;
     },
 
-
-    statIt : function(fileOrDir) {
-	var deferred = q.defer();
-	fs.stat(fileOrDir, function(error, data) {
-	    if (error) {
-		deferred.reject(new Error("Cannot stat " + error));
-	    } else {
-		deferred.resolve(data);
-	    }
-	});
-	
-	return deferred.promise;
-    },
-
     map : function (arr, iterator) {
 	var promises = arr.map(function (element) {
 	    return iterator(element) 
@@ -55,7 +41,7 @@ var repo = {
     },
 
     fileOrDir : function(fileOrDir) {
-	var fs_stat = q.nfbind(fs.stat);
+	var fs_stat = q.nfbind(fs.lstat);
 
 	var p = fs_stat(fileOrDir).then(function (data) {
 	    if (data.isDirectory()) {
@@ -65,7 +51,7 @@ var repo = {
 		console.log('File: ' + fileOrDir);
 		return repo.createRead(fileOrDir);
 	    }
-	}, console.error);
+	}, console.log);
 	
 	return p;
     },
@@ -74,10 +60,12 @@ var repo = {
 	var promises = [];
 
 	fs.readdir(dir, function(error, files) {
+	    if (error) {
+		console.log(error);
+	    }
 	    promises.push( repo.map(files, repo.fileOrDir) );
 	});
 		   
-	// console.log('Promises: ' + promises.length);
 	return q.all(promises);
     }
 	      
