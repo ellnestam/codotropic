@@ -12,7 +12,8 @@ var repo = {
 	    if (error) {
 		deferred.reject(new Error(error + '. Cannot read file: ' + fileName));
 	    } else {
-		deferred.resolve(text);
+		// console.log(fileName);
+		deferred.resolve([fileName, text]);
 	    }
 	});
 
