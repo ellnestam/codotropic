@@ -12,8 +12,7 @@ var repo = {
 	    if (error) {
 		deferred.reject(new Error(error + '. Cannot read file: ' + fileName));
 	    } else {
-		// console.log(fileName);
-		deferred.resolve([fileName, text]);
+		deferred.resolve({'f' : fileName, 't' : text});
 	    }
 	});
 
@@ -26,7 +25,7 @@ var repo = {
 	    if (error) {
 		deferred.reject(new Error('Cannot process dir: ' + dir + ' ' + error));
 	    } else {
-		deferred.resolve(files);
+		deferred.resolve({'f' : dir, 't': files});
 	    }
 	});
 

@@ -11,7 +11,11 @@ var codo = {
 
     launch : function launcher() {
 	var collect = function(data) {
-	    console.log(data[1]);
+	    
+	    // console.log(codo.fileAsInfo(data[0], data[1]));
+	    // console.log('Data: ' + data[0]);
+	    //console.log('Filename: ' + data[0]);
+	    console.log(data);
 	}
 
 	var readDir = repo.doIt('.');
@@ -19,10 +23,9 @@ var codo = {
 	readDir.then(collect, this.error).done();
     },
 
-    fileAsInfo : function (data) {
-	console.log(data);
+    fileAsInfo : function (data, fileName) {
 	var lines = data.toString().split('\n');
-	var fi = {fileName : 'keso.js',
+	var fi = {fileName : fileName,
 		  lines : []
 		 };
 	for (var i = 0; i < lines.length; i++) {
