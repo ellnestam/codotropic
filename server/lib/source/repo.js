@@ -45,10 +45,10 @@ var repo = {
 
 	var p = fs_stat(fileOrDir).then(function (data) {
 	    if (data.isDirectory()) {
-		console.log('Dir: ' + fileOrDir);
+		// console.log('Dir: ' + fileOrDir);
 		return repo.createProcessDir(fileOrDir);
 	    } else {
-		console.log('File: ' + fileOrDir);
+		// console.log('File: ' + fileOrDir);
 		return repo.createRead(fileOrDir);
 	    }
 	}, console.log);
