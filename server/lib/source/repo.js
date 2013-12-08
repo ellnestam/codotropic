@@ -25,11 +25,12 @@ var repo = {
 	    if (error) {
 		deferred.reject(new Error('Cannot process dir: ' + dir + ' ' + error));
 	    } else {
-		for (var i = 0; i < files.length; i++) {
-		    var path = dir + '/' + files[0];
-		    // console.log("Path: " + path);
-		    deferred.resolve( repo.fileOrDir(path) );
-		}
+		var paths = files.map(function(filename) {
+		    return dir + '/' + filename;
+		});
+
+		deferred.resolve( repo.map(paths, repo.fileOrDir) );
+	    
 	    }
 	});
 
@@ -49,7 +50,7 @@ var repo = {
 
 	var p = fs_stat(fileOrDir).then(function (data) {
 	    if (data.isDirectory()) {
-		// console.log('Dir: ' + fileOrDir);
+		console.log('Dir: ' + fileOrDir);
 		return repo.createProcessDir(fileOrDir);
 	    } else {
 		// console.log('File: ' + fileOrDir);

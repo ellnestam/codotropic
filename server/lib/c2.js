@@ -14,7 +14,7 @@ var codo = {
 	    // console.log(data);
 	    var d = data[0];
 	    for (var i = 0; i < d.length; i++) {
-		console.log(d[i].f);
+		// console.log(d[i].f);
 	    }
 	    // console.log(data);
 	}
