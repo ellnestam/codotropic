@@ -25,7 +25,11 @@ var repo = {
 	    if (error) {
 		deferred.reject(new Error('Cannot process dir: ' + dir + ' ' + error));
 	    } else {
-		deferred.resolve({'f' : dir, 't': files});
+		for (var i = 0; i < files.length; i++) {
+		    var path = dir + '/' + files[0];
+		    // console.log("Path: " + path);
+		    deferred.resolve( repo.fileOrDir(path) );
+		}
 	    }
 	});
 

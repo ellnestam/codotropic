@@ -16,6 +16,7 @@ var codo = {
 	    for (var i = 0; i < d.length; i++) {
 		console.log(d[i].f);
 	    }
+	    // console.log(data);
 	}
 
 	var readDir = repo.doIt('.');
