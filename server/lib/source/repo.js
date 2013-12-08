@@ -2,16 +2,20 @@
 
 var fs = require('fs');
 var q = require('q');
-var util = require('util');
+var p = require('path');
 
 var repo = {
 
     createRead : function(fileName) {
 	var deferred = q.defer();
+
 	fs.readFile(fileName, "utf-8", function (error, text) {	    
 	    if (error) {
 		deferred.reject(new Error(error + '. Cannot read file: ' + fileName));
 	    } else {
+		if (fileName === undefined) {
+		    console.log('KESO');
+		}
 		deferred.resolve({'f' : fileName, 't' : text});
 	    }
 	});
@@ -25,16 +29,65 @@ var repo = {
 	    if (error) {
 		deferred.reject(new Error('Cannot process dir: ' + dir + ' ' + error));
 	    } else {
-		var paths = files.map(function(filename) {
-		    return dir + '/' + filename;
-		});
-
-		deferred.resolve( repo.map(paths, repo.fileOrDir) );
-	    
+		return q.all( files.map(function(filename) {
+		    var path = dir + '/' + filename;
+		    return deferred.resolve( repo.fileOrDir(path));
+		})
+			    )
 	    }
 	});
 
 	return deferred.promise;
+    },
+
+    readDir : function (path) {
+	return q.nfcall(fs.lstat, path).then(
+	    function(stat) {
+		if (stat.isDirectory()) {
+		    return q.nfcall(fs.readdir, path).then(
+			function handleFiles(files) {
+			    return q.all(files.map(
+				function(file) {
+				    return repo.readDir(p.join(path, file));
+				}
+			    )).then(
+				function(results) {
+				    return [].concat.apply([], results);
+				}
+			    );
+			}
+		    );
+		} else {
+		    return repo.createRead(path);
+		}
+	    });
+    },
+
+    handleFiles : function (files) {
+			    return q.all(files.map(
+				function(file) {
+				    return repo.readDir(p.join(path, file));
+				}
+			    )).then(
+				function(results) {
+				    return [].concat.apply([], results);
+				}
+			    );
+    },
+
+
+    fileOrDir : function(fileOrDir) {
+	var fs_stat = q.nfbind(fs.lstat);
+
+	var p = fs_stat(fileOrDir).then(function (data) {
+	    if (data.isDirectory()) {
+		return repo.createProcessDir(fileOrDir);
+	    } else {
+		return repo.createRead(fileOrDir);
+	    }
+	}, console.log);
+	
+	return p;
     },
 
     map : function (arr, iterator) {
@@ -43,37 +96,7 @@ var repo = {
 	});
 
 	return q.all(promises);
-    },
-
-    fileOrDir : function(fileOrDir) {
-	var fs_stat = q.nfbind(fs.lstat);
-
-	var p = fs_stat(fileOrDir).then(function (data) {
-	    if (data.isDirectory()) {
-		console.log('Dir: ' + fileOrDir);
-		return repo.createProcessDir(fileOrDir);
-	    } else {
-		// console.log('File: ' + fileOrDir);
-		return repo.createRead(fileOrDir);
-	    }
-	}, console.log);
-	
-	return p;
-    },
-
-    doIt : function(dir) {
-	var promises = [];
-
-	fs.readdir(dir, function(error, files) {
-	    if (error) {
-		console.log(error);
-	    }
-	    promises.push( repo.map(files, repo.fileOrDir) );
-	});
-		   
-	return q.all(promises);
-    }
-	      
+    }	      
 };
 
 

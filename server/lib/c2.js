@@ -8,19 +8,16 @@ var repo = require('./source/repo.js');
 var codo = {
     launch : function launcher() {
 	var collect = function(data) {	    
-	    // console.log(codo.fileAsInfo(data[0], data[1]));
-	    // console.log('Data: ' + data[0]);
-	    //console.log('Filename: ' + data[0]);
-	    // console.log(data);
-	    var d = data[0];
+	    var d = data;
 	    for (var i = 0; i < d.length; i++) {
-		// console.log(d[i].f);
+		// console.log(d[i]);
+		console.log(  codo.fileAsInfo(d[i].t, d[i].f) ) ;
 	    }
-	    // console.log(data);
 	}
 
-	var readDir = repo.doIt('.');
-	readDir.then(collect, this.error).done();
+	var read = repo.readDir('./data');
+	read.then(collect, this.error).done();
+	
     },
 
     fileAsInfo : function (data, fileName) {
