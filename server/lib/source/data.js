@@ -8,13 +8,13 @@ var data = {
 		  lines : []
 		 };
 	for (var i = 0; i < lines.length; i++) {
-	    fi.lines.push(data.processLine(lines[i]));
+	    fi.lines.push(data.processRow(lines[i]));
 	}
 	
 	return fi;
     },
 
-    processLine : function (row) {
+    processRow : function (row) {
 	var regex = new RegExp("^\\s+");
 	var result = row.match(regex);
 	var numberOfWhitespace = 0;

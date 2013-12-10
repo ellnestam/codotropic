@@ -16,7 +16,7 @@ var codo = {
 	    var fi = function(info) {
 		console.log(info);
 	    };
-	    var read = repo.readDir(dir);
+	    var read = repo.scan(dir);
 	    read.then(codo.collect, codo.error).done();
 	}
     },
