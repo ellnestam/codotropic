@@ -1,18 +1,14 @@
 'use strict';
 
 var fs = require('fs');
+var q = require('q');
 
-var harvester = require('./source/harvester.js');
+var repo = require('./source/repo.js');
+var data = require('./source/data.js');
 
 var codo = {
-
-    serveResult : function(info) {
-	return function printFetched(application) {
-	    
-	}
-    },
-
-    launch : function launcher(harv, returnResult, args) {
+    
+    launch : function launcher(args) {
 	if (args.length < 4) {
 	    console.log("Usage: node codo.js [sourcedir] [outputdir]");
 	} else {
@@ -20,13 +16,22 @@ var codo = {
 	    var fi = function(info) {
 		console.log(info);
 	    };
-	    harv.gatherAll(dir, fi, args[3]);
+	    var read = repo.readDir(dir);
+	    read.then(codo.collect, codo.error).done();
 	}
-	
-	// returnResult('ARNE')();
+    },
+
+    collect : function(d) {	    
+	for (var i = 0; i < d.length; i++) {
+	    console.log( data.toInfo(d[i].t, d[i].f) ) ;
+	}
+    },
+
+    error : function error(e) {
+	console.error('Error out: ' + e);
     }
 }
 
-var srv = codo.launch(harvester, codo.serveResult, process.argv);
+var srv = codo.launch(process.argv);
 
 module.exports = codo;

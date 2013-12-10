@@ -2,7 +2,7 @@
 
 var data = {
 
-    dataAsInfo : function (d, fileName) {
+    toInfo : function (d, fileName) {
 	var lines = d.toString().split('\n');
 	var fi = {fileName : fileName,
 		  lines : []
