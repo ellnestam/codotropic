@@ -98,7 +98,7 @@
 	},
 	
     }
-	return that
+	return that;
     }    
     
     $(document).ready(function(){

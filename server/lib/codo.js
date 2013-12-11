@@ -21,7 +21,7 @@ var codo = {
 	}
     },
 
-    collect : function(d) {	    
+    collect : function(d) {    
 	for (var i = 0; i < d.length; i++) {
 	    console.log( data.toInfo(d[i].t, d[i].f) ) ;
 	}
