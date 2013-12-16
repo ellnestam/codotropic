@@ -1,9 +1,6 @@
-define(['arbor', 'jquery'], function(arbor, $) {
+define([], function() {
 
-    return function(canvas) {
-	var canvas = $(canvas).get(0);
-	var ctx = canvas.getContext("2d");
-	var particleSystem;
+    return function(ctx, particleSystem, $, canvas) {
 
 	var that = {
 	    data : {
@@ -14,14 +11,13 @@ define(['arbor', 'jquery'], function(arbor, $) {
 		'e' : [[0, 10], [0, 25], [0, 40]],
 		'f' : [[0, 10], [0, 30], [0, 30]]
 	    },
-
-	    init : function(system){
-		particleSystem = system;
+	    
+	    init : function(){
 		particleSystem.screenSize(canvas.width, canvas.height);
 		particleSystem.screenPadding(80);
 		that.initMouseHandling();
 	    },
-      
+	    
 	    redraw : function() {
 		ctx.fillStyle = "white"
 		ctx.fillRect(0,0, canvas.width, canvas.height)
@@ -34,10 +30,10 @@ define(['arbor', 'jquery'], function(arbor, $) {
 		    ctx.lineTo(pt2.x, pt2.y)
 		    ctx.stroke()
 		})
-
+		
 		particleSystem.eachNode(that.drawNode)    			
 	    },
-      
+	    
 	    drawNode : function(node, pt){
 		var layout = that.data[node.name] || [[0, 4]];
 		
@@ -52,35 +48,35 @@ define(['arbor', 'jquery'], function(arbor, $) {
 	    
 	    initMouseHandling : function() {
 		var dragged = null;
-
+		
 		var handler = {
 		    clicked:function(e){
 			var pos = $(canvas).offset();
 			_mouseP = arbor.Point(e.pageX-pos.left, e.pageY-pos.top)
 			dragged = particleSystem.nearest(_mouseP);
-
+			
 			if (dragged && dragged.node !== null){
 			    dragged.node.fixed = true
 			}
-
+			
 			$(canvas).bind('mousemove', handler.dragged)
 			$(window).bind('mouseup', handler.dropped)
-
+			
 			return false
 		    },
-            
+		    
 		    dragged : function(e){
 			var pos = $(canvas).offset();
 			var s = arbor.Point(e.pageX-pos.left, e.pageY-pos.top)
-		
+			
 			if (dragged && dragged.node !== null){
 			    var p = particleSystem.fromScreen(s)
 			    dragged.node.p = p
 			}
-
+			
 			return false;
-            },
-	    
+		    },
+		    
 		    dropped:function(e){
 			if (dragged===null || dragged.node===undefined) return
 			if (dragged.node !== null) dragged.node.fixed = false
@@ -92,13 +88,9 @@ define(['arbor', 'jquery'], function(arbor, $) {
 			return false
 		    }
 		}
-        
-		// start listening
-		$(canvas).mousedown(handler.clicked);
-	    
+		$(canvas).mousedown(handler.clicked);	    
 	    },
 	}
 	return that;
     }
-     
 });
