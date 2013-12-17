@@ -24,18 +24,23 @@
    curl(
         [
             'lib/arbor',
-            'app/viz'
+            'app/viz',
+            'app/data'
         ]
     ).then(
-        function (arbor, viz) {
-           var canvas = $("#viewport").get(0)
+        function (arbor, viz, data) {
+           var canvas = $("#viewport").get(0);
            var ctx = canvas.getContext("2d");
-           var sys = arbor.ParticleSystem(1000, 600, 0.5);
+           var sys = arbor.ParticleSystem(1000, 500, 0.5);
            sys.parameters({gravity:true});
 
-           var renderer = viz(ctx, sys, $, canvas);
+           var renderer = viz(ctx, sys, $, canvas, data);
            sys.renderer = renderer;
-           sys.addNode('a', 'b');
+           sys.addEdge('a', 'b');
+           sys.addEdge('a', 'c');
+           sys.addEdge('a', 'd');
+           sys.addEdge('b', 'e');
+           sys.addEdge('b', 'f');
 
 
         },
@@ -49,8 +54,6 @@
 
 </head>
 <body>
-
-
   <canvas id="viewport" width="800" height="600"></canvas>
 </body>
 </html>

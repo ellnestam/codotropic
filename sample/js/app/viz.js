@@ -1,16 +1,9 @@
 define([], function() {
 
-    return function(ctx, particleSystem, $, canvas) {
+    return function(ctx, particleSystem, $, canvas, d) {
 
 	var that = {
-	    data : {
-		'a' : [[0, 20], [0, 45], [4, 40], [4, 20], [0, 30]],
-		'b' : [[0, 10], [0, 15], [4, 20], [4, 30], [0, 37]],
-		'c' : [[0, 20], [4, 45], [8, 40], [8, 20], [4, 3]],
-		'd' : [[0, 10], [2, 25], [6, 40], [6, 20], [2, 3]],
-		'e' : [[0, 10], [0, 25], [0, 40]],
-		'f' : [[0, 10], [0, 30], [0, 30]]
-	    },
+	    data : d,
 	    
 	    init : function(){
 		particleSystem.screenSize(canvas.width, canvas.height);
