@@ -21,9 +21,15 @@ var codo = {
 	}
     },
 
-    collect : function(d) {    
-	for (var i = 0; i < d.length; i++) {
-	    console.log( data.toInfo(d[i].t, d[i].f) ) ;
+    collect : function(d) {
+
+	var promises = [].concat.apply([], d);
+	var p2 = [].concat.apply([], promises);
+	
+	for (var i = 0; i < p2.length; i++) {
+	    // console.log( data.toInfo(d[i].t, d[i].f) ) ;
+	    // console.log(data.toInfo(promises[i].t, promises[i].f));
+	    console.log(p2[i].f);
 	}
     },
 

@@ -20,12 +20,23 @@ var repo = {
 	return deferred.promise;
     },
 
+    deferDir : function(path, data) {
+	var d = q.defer();
+	d.resolve({'f': path, 't': data});
+	d.reject("What happened");
+	return q.all(d.promise);
+    },
+
     scan : function (path) {
 	return q.nfcall(fs.lstat, path).then(
 	    function(stat) {
 		if (stat.isDirectory()) {
+		    var r2 = repo.deferDir(path, '');
+
 		    var all = q.nfcall(fs.readdir, path);
-		    return all.then(repo.readAll(path));
+		    var readAllPromises = repo.readAll(path);
+		    var res = all.then(readAllPromises);
+		    return q.all([res, r2]);
 		} else {
 		    return repo.deferRead(path);
 		}
