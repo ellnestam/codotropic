@@ -24,7 +24,7 @@ var repo = {
 	var d = q.defer();
 	d.resolve({'f': path, 't': data});
 	d.reject("What happened");
-	return q.all(d.promise);
+	return [d.promise];
     },
 
     scan : function (path) {
@@ -36,7 +36,8 @@ var repo = {
 		    var all = q.nfcall(fs.readdir, path);
 		    var readAllPromises = repo.readAll(path);
 		    var res = all.then(readAllPromises);
-		    return q.all([res, r2]);
+		    // console.log(res);
+		    return q.all( res, r2 );
 		} else {
 		    return repo.deferRead(path);
 		}
