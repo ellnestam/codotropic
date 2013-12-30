@@ -17,13 +17,13 @@ var codo = {
 		console.log(info);
 	    };
 	    var read = repo.scan(dir);
-	    read.then(codo.collect, codo.error).done();
+	    read.then(codo.collect, codo.error);
 	}
     },
 
     collect : function(d) {
+	// console.log(d);
 	console.log(d.length);
-	// console.log(d.length);
 
 	var promises = [].concat.apply([], d);
 	var p2 = [].concat.apply([], promises);
@@ -32,7 +32,7 @@ var codo = {
 	    // console.log( data.toInfo(d[i].t, d[i].f) ) ;
 	    // console.log(data.toInfo(promises[i].t, promises[i].f));
 	    // console.log(promises[i]);
-	    // console.log(promises[i]) // .done(console.log);
+	    console.log(promises[i].f);
 	}
     },
 

@@ -24,7 +24,7 @@ var repo = {
 	var d = q.defer();
 	d.resolve({'f': path, 't': data});
 	d.reject("What happened");
-	return [d.promise];
+	return d.promise;
     },
 
     scan : function (path) {
@@ -37,7 +37,14 @@ var repo = {
 		    var readAllPromises = repo.readAll(path);
 		    var res = all.then(readAllPromises);
 		    // console.log(res);
-		    return q.all( res, r2 );
+		    // return q.all( res, r2 );
+		    // console.log('R2 ' + r2);
+		    return q.all([res, r2]).then(
+			function(results) {
+			    return [].concat.apply([], results);
+			}
+		    );
+
 		} else {
 		    return repo.deferRead(path);
 		}
@@ -57,6 +64,7 @@ var repo = {
     
     read : function(path) {
 	return function (file) {
+	    // return [].concat.apply([], repo.scan(p.join(path, file)));
 	    return repo.scan(p.join(path, file));
 	}
     },
