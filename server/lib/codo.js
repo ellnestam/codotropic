@@ -22,18 +22,15 @@ var codo = {
     },
 
     collect : function(d) {
-	// console.log(d);
-	console.log(d.length);
-
 	var promises = [].concat.apply([], d);
 	var p2 = [].concat.apply([], promises);
 	
 	for (var i = 0; i < promises.length; i++) {
-	    // console.log( data.toInfo(d[i].t, d[i].f) ) ;
-	    // console.log(data.toInfo(promises[i].t, promises[i].f));
-	    // console.log(promises[i]);
-	    console.log(promises[i].f);
+	    var p = promises[i];
+	    p.info = data.toInfo(p.t);
 	}
+
+	console.log(JSON.stringify(d));
     },
 
     error : function error(e) {

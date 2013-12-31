@@ -13,7 +13,7 @@ var repo = {
 	    if (error) {
 		deferred.reject(new Error(error + '. Cannot read file: ' + filePath));
 	    } else {
-		deferred.resolve({'f' : filePath, 't' : text});
+		deferred.resolve({'file' : filePath, 'text' : text, 'parent': p.dirname(filePath)});
 	    }
 	});
 
@@ -22,8 +22,8 @@ var repo = {
 
     deferDir : function(path, data) {
 	var d = q.defer();
-	d.resolve({'f': path, 't': data});
-	d.reject("What happened");
+	d.resolve({'file': path, 'text': data, 'parent': p.dirname(path)});
+	d.reject("What happened!");
 	return d.promise;
     },
 
@@ -36,9 +36,7 @@ var repo = {
 		    var all = q.nfcall(fs.readdir, path);
 		    var readAllPromises = repo.readAll(path);
 		    var res = all.then(readAllPromises);
-		    // console.log(res);
-		    // return q.all( res, r2 );
-		    // console.log('R2 ' + r2);
+
 		    return q.all([res, r2]).then(
 			function(results) {
 			    return [].concat.apply([], results);
