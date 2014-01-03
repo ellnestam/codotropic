@@ -4,8 +4,8 @@ var fs = require('fs');
 var q = require('q');
 
 var repo = require('./source/repo.js');
-var data = require('./source/data.js');
 var writer = require('./source/writer.js');
+var textInfo = require('./source/data.js');
 
 var codo = {
     
@@ -14,10 +14,7 @@ var codo = {
 	    console.log("Usage: node codo.js [sourcedir] [outputdir]");
 	} else {
 	    var dir = args[2];
-	    var fi = function(info) {
-		console.log(info);
-	    };
-	    var read = repo.scan(dir);
+	    var read = repo.scan(dir, textInfo);
 	    read.then(codo.collect, codo.error).done();
 	}
     },
@@ -25,12 +22,6 @@ var codo = {
     collect : function(d) {
 	var promises = [].concat.apply([], d);
 	var p2 = [].concat.apply([], promises);
-
-	for (var i = 0; i < promises.length; i++) {
-	    var p = promises[i];
-	    d.info = data.toInfo(p.text);
-	}
-
 	writer.createDataFile(d);
     },
 
