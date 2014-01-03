@@ -2,13 +2,13 @@ This is a visualization tool for code. In fact any raw text file that resides in
 
 ### Introduction
 
-Wading through code is tedious work and getting quick overview of a code base can be even more demanding. Codotropic offers you a way to visualize your code base in an alternate way. Instead of reading the text you can view it in a more abstract way.
+Wading through code is tedious work and getting a quick overview of a code base can be demanding. Codotropic offers you a way to visualize your code base in a different form. Instead of reading code like you usually do, you can digest it in a more visual way.
 
-Start by running the tool and then you can watch the code in a browser.
+Start by running generating a projection of the code, after that you can watch the code in your favorite browser *cough* Chrome *cough*.
 
 ## Goal of the project
 
-Get a quick feel for where your complexity is by looking at a code base in visual form.
+Get a quicker feel for where your complexity is by looking at a code base in visual form. Find large files, overpopulated dirs and other interesting facts about your code base in seconds!
 
 ## How to use it
 
