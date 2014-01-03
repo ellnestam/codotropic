@@ -27,8 +27,18 @@ define([], function() {
 		particleSystem.eachNode(that.drawNode)    			
 	    },
 	    
+	    findNodeInfo : function(data, name) {
+		for (var i = 0; data.length; i++) {
+		    var info = data[i];
+		    if (info.file === name) {
+			return info.info.lines;
+		    }
+		}
+		return [[0, 4]];
+	    },
+
 	    drawNode : function(node, pt){
-		var layout = that.data[node.name] || [[0, 4]];
+		var layout = that.findNodeInfo(that.data.edges, node.name);
 		
 		ctx.fillStyle = (node.data.alone) ? "orange" : "black"
 		
