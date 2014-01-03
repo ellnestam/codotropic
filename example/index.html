@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <title>Codotropic</title>
+ <link rel="stylesheet" href="style.css" type="text/css">
+
+
+<script>
+    curl = {
+    baseUrl: 'js/',
+    paths: {
+        'jquery': 'lib/jquery',
+        'viz': 'app/viz'
+    }
+}
+</script>
+
+<script src="js/curl.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+   curl(
+        [
+            'lib/arbor',
+            'app/viz',
+            'app/data'
+        ]
+    ).then(
+        function (arbor, viz, data) {
+           var canvas = $("#viewport").get(0);
+           var ctx = canvas.getContext("2d");
+           var sys = arbor.ParticleSystem(1000, 500, 0.5);
+           sys.parameters({gravity:true});
+
+
+   var edges = data.edges;
+
+   var renderer = viz(ctx, sys, $, canvas, data);
+   sys.renderer = renderer;
+
+   for (var i = 0; i < edges.length; i++) {
+      sys.addEdge(edges[i].parent, edges[i].file);
+   }
+
+        },
+        // execute this callback if there was a problem
+        function (ex) {
+            var msg = 'OH SNAP: ' + ex.message;
+            alert(msg);
+        }
+    );
+</script>
+
+</head>
+<body>
+  <canvas id="viewport" width="800" height="600"></canvas>
+</body>
+</html>
