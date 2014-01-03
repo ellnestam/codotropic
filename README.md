@@ -6,17 +6,14 @@ Run the command ... watch the output
 
 ## Goal of the project
 
-Get a quick feel for where you're complexity is.
+Get a quick feel for where your complexity is by looking at a code base in visual form
 
 ## How to use it
 
-- npm install
-- Point at dir
-- Max Depth (number of dirs)
-- Max Breadth (number of dirs)
-
-Arbor.js
-
+- clone repo
+- run npm install to add dependencies
+- cd into the server/lib dir and run the command 'node codo.js <sourcedir> <outputdir> <filetyp>'
+- point your browser to the index.html file in the <outputdir> above
 
 ## About the name
 
