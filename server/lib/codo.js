@@ -65,16 +65,19 @@ var codo = {
 	    var promises = [].concat.apply([], d);
 
 	    var filtered = promises.filter(function(obj) {
-		return codo.endsWith(obj.file, suffix);
+		return obj.type === 'dir' || codo.endsWith(obj.file, suffix);
 	    });
+	   
 
 	    writer.createDataFile(filtered, fileName);
+
 	    var amount = filtered.length;
+	    console.log('');
+	    console.log('Found ' + amount + ' file(s)');
+
 	    if (amount > 200) {
-		console.log('');
-		console.log('Found ' + amount + ' file(s)');
 		console.log('');		
-		console.log('Whooaaah! That is a lot of files, probably too many, both for you and the computer. May I suggest you choose a sub dir instead?');
+		console.log('Wooaaah! That is a lot of files, probably too many, both for you and the computer. May I suggest you choose a sub dir instead?');
 		console.log('Anyway, the stuff is still stored for you.');
 		console.log('');
 	    }

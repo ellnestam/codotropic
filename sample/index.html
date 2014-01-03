@@ -30,8 +30,12 @@
     ).then(
         function (arbor, viz, data) {
            var canvas = $("#viewport").get(0);
+           var width = $(window).width() - 80;
+           var height = $(window).height() - 80;
+           canvas.width = width;
+           canvas.height = height;
            var ctx = canvas.getContext("2d");
-           var sys = arbor.ParticleSystem(1000, 500, 0.5);
+           var sys = arbor.ParticleSystem(width, height, 0.5);
            sys.parameters({gravity:true});
 
 
@@ -55,6 +59,6 @@
 
 </head>
 <body>
-  <canvas id="viewport" width="800" height="600"></canvas>
+  <canvas id="viewport"></canvas>
 </body>
 </html>

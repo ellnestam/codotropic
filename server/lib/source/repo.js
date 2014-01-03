@@ -13,7 +13,7 @@ var repo = {
 	    if (error) {
 		deferred.reject(new Error(error + '. Cannot read file: ' + filePath));
 	    } else {
-		deferred.resolve({'file' : filePath, 'parent': p.dirname(filePath), 'info': textInfo.toInfo(text)});
+		deferred.resolve({'file' : filePath, 'type': 'file', 'parent': p.dirname(filePath), 'info': textInfo.toInfo(text)});
 	    }
 	});
 
@@ -22,7 +22,7 @@ var repo = {
 
     deferDir : function(path, data) {
 	var d = q.defer();
-	d.resolve({'file': path, 'parent': p.dirname(path), 'info' : ''});
+	d.resolve({'file': path, 'type': 'dir', 'parent': p.dirname(path), 'info' : ''});
 	d.reject("What happened!");
 	return d.promise;
     },
