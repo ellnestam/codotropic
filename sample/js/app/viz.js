@@ -38,7 +38,7 @@ define([], function() {
 	    },
 
 	    drawNode : function(node, pt){
-		var layout = that.findNodeInfo(that.data.edges, node.name);
+		var layout = that.findNodeInfo(that.data.edges, node.name) || [[0, 4]];
 		
 		ctx.fillStyle = (node.data.alone) ? "orange" : "black"
 		
