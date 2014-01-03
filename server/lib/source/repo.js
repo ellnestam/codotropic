@@ -62,7 +62,6 @@ var repo = {
     
     read : function(path) {
 	return function (file) {
-	    // return [].concat.apply([], repo.scan(p.join(path, file)));
 	    return repo.scan(p.join(path, file));
 	}
     },
