@@ -28,7 +28,7 @@ define([], function() {
 	    },
 	    
 	    findNodeInfo : function(data, name) {
-		for (var i = 0; data.length; i++) {
+		for (var i = 0; i < data.length; i++) {
 		    var info = data[i];
 		    if (info.file === name) {
 			return info.info.lines;
@@ -37,8 +37,9 @@ define([], function() {
 		return [[0, 4]];
 	    },
 
-	    drawNode : function(node, pt){
-		var layout = that.findNodeInfo(that.data.edges, node.name) || [[0, 4]];
+	    drawNode : function(node, pt) {
+		var edges = that.data.edges;
+		var layout = that.findNodeInfo(edges, node.name) || [[0, 4]];
 		
 		ctx.fillStyle = (node.data.alone) ? "orange" : "black"
 		
