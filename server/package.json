@@ -28,7 +28,8 @@
     "test": "grunt nodeunit"
   },
     "dependencies": {
-	"q": "*"
+	"q": "*",
+	"ncp": "*"
     },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.6.4",

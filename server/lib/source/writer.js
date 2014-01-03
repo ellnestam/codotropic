@@ -4,7 +4,7 @@ var fs = require('fs');
 
 var writer = {
 
-    createDataFile : function(input) {
+    createDataFile : function(input, file) {
 	var data = 'define([], function() {\n';
 	data += '\n';
 	data += 'return data = {\n';
@@ -12,9 +12,11 @@ var writer = {
 	data += JSON.stringify(input);
 	data += '}\n});';
 	
-	fs.writeFile('data_t.js', data, function(err) {
+	fs.writeFile(file, data, function(err) {
 	    if (err) {
 		throw err;
+	    } else {
+		console.log('Wrote: ' + file);
 	    }
 	});
     }
