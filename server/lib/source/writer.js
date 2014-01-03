@@ -16,7 +16,7 @@ var writer = {
 	    if (err) {
 		throw err;
 	    } else {
-		console.log('Wrote: ' + file);
+		console.log('Codotropic view created. Have fun!');
 	    }
 	});
     }
