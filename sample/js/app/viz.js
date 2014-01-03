@@ -48,6 +48,9 @@ define([], function() {
 		    var row = layout[i];
 		    ctx.fillRect(pt.x + row[0], pt.y + i * lineHeight, row[1], lineHeight);
 		}
+
+		ctx.font = "8px sans-serif";
+		ctx.fillText(node.name, pt.x, pt.y);
             },
 	    
 	    initMouseHandling : function() {
