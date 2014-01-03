@@ -6,14 +6,14 @@ var p = require('path');
 
 var repo = {
 
-    deferRead : function(filePath) {
+    deferRead : function(filePath, textInfo) {
 	var deferred = q.defer();
 
 	fs.readFile(filePath, "utf-8", function (error, text) {	    
 	    if (error) {
 		deferred.reject(new Error(error + '. Cannot read file: ' + filePath));
 	    } else {
-		deferred.resolve({'file' : filePath, 'text' : text, 'parent': p.dirname(filePath)});
+		deferred.resolve({'file' : filePath, 'parent': p.dirname(filePath), 'info': textInfo.toInfo(text)});
 	    }
 	});
 
@@ -22,19 +22,19 @@ var repo = {
 
     deferDir : function(path, data) {
 	var d = q.defer();
-	d.resolve({'file': path, 'text': data, 'parent': p.dirname(path)});
+	d.resolve({'file': path, 'parent': p.dirname(path), 'info' : ''});
 	d.reject("What happened!");
 	return d.promise;
     },
 
-    scan : function (path) {
+    scan : function (path, textInfo) {
 	return q.nfcall(fs.lstat, path).then(
 	    function(stat) {
 		if (stat.isDirectory()) {
 		    var r2 = repo.deferDir(path, '');
 
 		    var all = q.nfcall(fs.readdir, path);
-		    var readAllPromises = repo.readAll(path);
+		    var readAllPromises = repo.readAll(path, textInfo);
 		    var res = all.then(readAllPromises);
 
 		    return q.all([res, r2]).then(
@@ -44,15 +44,15 @@ var repo = {
 		    );
 
 		} else {
-		    return repo.deferRead(path);
+		    return repo.deferRead(path, textInfo);
 		}
 	    }
 	);
     },
 
-    readAll : function(path) {
+    readAll : function(path, textInfo) {
 	return function handleFiles(files) {
-	    return q.all(files.map(repo.read(path))).then(
+	    return q.all(files.map(repo.read(path, textInfo))).then(
 		function(results) {
 		    return [].concat.apply([], results);
 		}
@@ -60,9 +60,9 @@ var repo = {
 	}	
     },
     
-    read : function(path) {
+    read : function(path, textInfo) {
 	return function (file) {
-	    return repo.scan(p.join(path, file));
+	    return repo.scan(p.join(path, file), textInfo);
 	}
     },
 };
