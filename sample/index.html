@@ -37,15 +37,12 @@
 
    var edges = data.edges;
 
-
    var renderer = viz(ctx, sys, $, canvas, data);
    sys.renderer = renderer;
 
    for (var i = 0; i < edges.length; i++) {
       sys.addEdge(edges[i].parent, edges[i].file);
    }
-
-
 
         },
         // execute this callback if there was a problem
