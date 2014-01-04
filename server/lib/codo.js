@@ -52,22 +52,18 @@ var codo = {
 	return str.indexOf(suffix, str.length - suffix.length) !== -1;
     },
 
-    filter: function(arr, criteria) {
-	return arr.filter(function(obj) {
-	    return Object.keys(criteria).every(function(c) {
-		return obj[c] == criteria[c];
-	    });
-	});
+    contains : function (str, substring) {
+	return str.indexOf(substring) === -1;
     },
+
 
     collect : function(fileName, suffix) {
 	return function(d) {
 	    var promises = [].concat.apply([], d);
 
 	    var filtered = promises.filter(function(obj) {
-		return obj.type === 'dir' || codo.endsWith(obj.file, suffix);
+		return (obj.type === 'dir' || codo.endsWith(obj.file, suffix)) && codo.contains(obj.file, '/.');
 	    });
-	   
 
 	    writer.createDataFile(filtered, fileName);
 
@@ -78,7 +74,7 @@ var codo = {
 	    if (amount > 200) {
 		console.log('');		
 		console.log('Wooaaah! That is a lot of files, probably too many, both for you and the computer. May I suggest you choose a sub dir instead?');
-		console.log('Anyway, the stuff is still stored for you.');
+		console.log('Anyway, the Codotropic files were still stored for you.');
 		console.log('');
 	    }
 	};
