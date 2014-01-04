@@ -72,7 +72,7 @@ var codo = {
 	    });
 
 	    if (!keepHidden) {
-		console.log('Removing dirs that starts with a dot');
+		console.log('Removing dirs that starts with a dot. Disable this with --keep-hidden');
 		filtered = filtered.filter(function(obj) {
 		    return codo.notContains(obj.file, '/.')
 		});
