@@ -14,13 +14,14 @@ Get a quicker feel for where your complexity is by looking at a code base in vis
 
 - Install Node.js
 - Clone this repo
+- Cd into the directory &lt;clone&gt;/server
 - Run npm install to add the needed dependencies
-- Cd into the directory <<clone>>/server/lib and run the command 'node codo.js <sourcedir> <outputdir> <extension>'
-- Point your browser to the index.html file in the <outputdir> above
+- Cd into the directory &lt;clone&gt;/server/lib and run the command 'node codo.js &lt<;sourcedir&gt; &lt;outputdir&gt; &lt;extension&gt;'
+- Point your browser to the index.html file in the &lt;outputdir&gt; above
 
 ## Examples
 
-The example dir contains a codotropic view of the code of this project (how's that for meta?). The same view can be found in the example.zip file.
+The example dir contains a codotropic view of the code for this project. The same view can be found in the example.zip file.
 
 ## About the name
 
