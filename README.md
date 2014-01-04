@@ -15,7 +15,7 @@ Get a quicker feel for where your complexity is by looking at a code base in vis
 - Install Node.js
 - Clone this repo
 - Run npm install to add the needed dependencies
-- Cd into the directory <<clone>>/server/lib and run the command 'node codo.js <sourcedir> <outputdir> <filetyp>'
+- Cd into the directory <<clone>>/server/lib and run the command 'node codo.js <sourcedir> <outputdir> <extension>'
 - Point your browser to the index.html file in the <outputdir> above
 
 ## Examples
