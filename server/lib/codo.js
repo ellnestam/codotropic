@@ -13,7 +13,8 @@ var codo = {
     
     launch : function launcher(args) {
 	if (args.length < 5) {
-	    console.log("Usage: node codo.js [sourcedir] [outputdir] [filetype]");
+	    console.log("Usage: node codo.js [sourcedir] [outputdir] [filetype] --keep-hidden");
+	    console.log("By adding the --keep-hidden you do not skip directories that start with a dot. i.e .git, .subversion etc");
 	} else {
 	    var codoBinPath = args[1];
 	    var dest = args[3];
@@ -23,10 +24,12 @@ var codo = {
 
 	    console.log('Working ...');
 	    
+	    var keepHidden = (args[5] !== undefined && args[5] === '--keep-hidden') || false;
+
 	    setup.then(function() {
 		var dirToRead = args[2];
 		var read = repo.scan(dirToRead, textInfo);
-		read.then(codo.collect(p.join(dest, '/js/app/data.js'), args[4]), 
+		read.then(codo.collect(p.join(dest, '/js/app/data.js'), args[4], keepHidden), 
 			  codo.error)
 		    .done();
 	    });
@@ -52,18 +55,25 @@ var codo = {
 	return str.indexOf(suffix, str.length - suffix.length) !== -1;
     },
 
-    contains : function (str, substring) {
+    notContains : function (str, substring) {
 	return str.indexOf(substring) === -1;
     },
 
 
-    collect : function(fileName, suffix) {
+    collect : function(fileName, suffix, keepHidden) {
 	return function(d) {
 	    var promises = [].concat.apply([], d);
 
 	    var filtered = promises.filter(function(obj) {
-		return (obj.type === 'dir' || codo.endsWith(obj.file, suffix)) && codo.contains(obj.file, '/.');
+		return obj.type === 'dir' || codo.endsWith(obj.file, suffix);
 	    });
+
+	    if (!keepHidden) {
+		console.log('Removing dirs that starts with a dot');
+		filtered = filtered.filter(function(obj) {
+		    return codo.notContains(obj.file, '/.')
+		});
+	    }
 
 	    writer.createDataFile(filtered, fileName);
 
