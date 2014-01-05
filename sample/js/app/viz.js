@@ -33,6 +33,7 @@ define([], function() {
 		    nodeInfo.info = {};
 		    nodeInfo.info.lines = [[0, 4], [0, 4]];
 		    nodeInfo.type = 'dir';
+		    nodeInfo.color = 'black';
 		}
 
 		return nodeInfo;
@@ -43,7 +44,7 @@ define([], function() {
 		var n = that.findNode(edges, node.name);
 
 		var layout = n.info.lines;
-		ctx.fillStyle = (n.type === 'dir') ? "orange" : "black"
+		ctx.fillStyle = n.color;
 		
 		var lineHeight = 1;
 		for (var i = 0; i < layout.length; i++) {
@@ -52,7 +53,7 @@ define([], function() {
 		}
 
 		ctx.fillStyle = 'black';
-		ctx.font = "8px sans-serif";
+		ctx.font = "8px bold sans-serif";
 		ctx.fillText(node.name, pt.x, pt.y);
             },
 	    

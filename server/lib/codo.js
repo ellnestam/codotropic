@@ -81,7 +81,8 @@ var codo = {
 	    var nodes = {};
 	    for (var i = 0; i < filtered.length; i++) {
 		var item = filtered[i];
-		nodes[item.file] = {file: item.file, type: item.type, parent: item.parent, info: item.info};
+		var color = (item.type === 'dir') ? 'orange' : 'black';
+		nodes[item.file] = {file: item.file, type: item.type, parent: item.parent, info: item.info, color: color};
 	    }
 
 	    var amount = filtered.length;
