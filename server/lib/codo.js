@@ -65,7 +65,7 @@ var codo = {
 
     collect : function(fileName, suffix, keepHidden) {
 	return function(d) {
-	    var promises = [].concat.apply([], d);
+	    var promises = d;
 
 	    var filtered = promises.filter(function(obj) {
 		return obj.type === 'dir' || codo.endsWith(obj.file, suffix);
@@ -76,6 +76,13 @@ var codo = {
 		filtered = filtered.filter(function(obj) {
 		    return codo.notContains(obj.file, '/.')
 		});
+	    }
+
+	    for (var i = 0; i < filtered.length; i++) {
+		if (filtered[i].file.indexOf('jquery') >= 0) {
+		    console.log('JQuery found');
+		    filtered[i].color = 'grey';
+		}
 	    }
 
 	    writer.createDataFile(filtered, fileName);

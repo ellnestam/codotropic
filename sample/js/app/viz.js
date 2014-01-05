@@ -26,22 +26,24 @@ define([], function() {
 		
 		particleSystem.eachNode(that.drawNode)    			
 	    },
-	    
-	    findNodeInfo : function(data, name) {
+
+	    findNode : function(data, name) {
 		for (var i = 0; i < data.length; i++) {
 		    var info = data[i];
 		    if (info.file === name) {
-			return info.info.lines;
+			return info;
 		    }
 		}
-		return [[0, 4]];
+		return {info : {lines : [[0, 4]]}};
 	    },
 
 	    drawNode : function(node, pt) {
 		var edges = that.data.edges;
-		var layout = that.findNodeInfo(edges, node.name) || [[0, 4]];
-		
-		ctx.fillStyle = (node.data.alone) ? "orange" : "black"
+		var n = that.findNode(edges, node.name);
+		var nodeInfo = n.info.lines;
+		var layout = n.info.lines || [[0, 4]];
+
+		ctx.fillStyle = (n.type === 'dir') ? "orange" : "black"
 		
 		var lineHeight = 2;
 		for (var i = 0; i < layout.length; i++) {
@@ -49,6 +51,7 @@ define([], function() {
 		    ctx.fillRect(pt.x + row[0], pt.y + i * lineHeight, row[1], lineHeight);
 		}
 
+		ctx.fillStyle = 'black';
 		ctx.font = "8px sans-serif";
 		ctx.fillText(node.name, pt.x, pt.y);
             },

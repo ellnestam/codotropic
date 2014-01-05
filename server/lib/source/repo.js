@@ -22,7 +22,7 @@ var repo = {
 
     deferDir : function(path, data) {
 	var d = q.defer();
-	d.resolve({'file': path, 'type': 'dir', 'parent': p.dirname(path), 'info' : ''});
+	d.resolve({'file': path, 'type': 'dir', 'parent': p.dirname(path), 'info' : {'lines' : [[0, 4]]}});
 	d.reject("What happened!");
 	return d.promise;
     },
