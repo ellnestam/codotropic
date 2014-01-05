@@ -81,16 +81,13 @@ var codo = {
 	    var nodes = {};
 	    for (var i = 0; i < filtered.length; i++) {
 		var item = filtered[i];
-		// console.log(item.file);
 		nodes[item.file] = {file: item.file, type: item.type, parent: item.parent, info: item.info};
 	    }
 
-	    console.log(nodes);
-	    filtered = nodes;
-
-	    writer.createDataFile(filtered, fileName);
-
 	    var amount = filtered.length;
+
+	    writer.createDataFile(nodes, fileName);
+
 	    console.log('');
 	    console.log('Found ' + amount + ' file(s)');
 

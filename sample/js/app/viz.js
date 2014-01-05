@@ -7,7 +7,6 @@ define([], function() {
 	    
 	    init : function(){
 		particleSystem.screenSize(canvas.width, canvas.height);
-		particleSystem.screenPadding(80);
 		that.initMouseHandling();
 	    },
 	    
@@ -35,14 +34,14 @@ define([], function() {
 		var edges = that.data.edges;
 		var n = that.findNode(edges, node.name);
 
-		var layout = [[0, 4]];
+		var layout = [[0, 4], [0, 4]];
 		ctx.fillStyle = 'black';
 		if (n !== undefined) {
 		    layout = n.info.lines;
 		    ctx.fillStyle = (n.type === 'dir') ? "orange" : "black"
 		} 
 		
-		var lineHeight = 2;
+		var lineHeight = 1;
 		for (var i = 0; i < layout.length; i++) {
 		    var row = layout[i];
 		    ctx.fillRect(pt.x + row[0], pt.y + i * lineHeight, row[1], lineHeight);
