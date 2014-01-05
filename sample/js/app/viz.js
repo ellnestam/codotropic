@@ -28,22 +28,19 @@ define([], function() {
 	    },
 
 	    findNode : function(data, name) {
-		for (var i = 0; i < data.length; i++) {
-		    var info = data[i];
-		    if (info.file === name) {
-			return info;
-		    }
-		}
-		return {info : {lines : [[0, 4]]}};
+		return data[name];
 	    },
 
 	    drawNode : function(node, pt) {
 		var edges = that.data.edges;
 		var n = that.findNode(edges, node.name);
-		var nodeInfo = n.info.lines;
-		var layout = n.info.lines || [[0, 4]];
 
-		ctx.fillStyle = (n.type === 'dir') ? "orange" : "black"
+		var layout = [[0, 4]];
+		ctx.fillStyle = 'black';
+		if (n !== undefined) {
+		    layout = n.info.lines;
+		    ctx.fillStyle = (n.type === 'dir') ? "orange" : "black"
+		} 
 		
 		var lineHeight = 2;
 		for (var i = 0; i < layout.length; i++) {

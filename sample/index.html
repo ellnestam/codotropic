@@ -29,25 +29,25 @@
         ]
     ).then(
         function (arbor, viz, data) {
-           var canvas = $("#viewport").get(0);
-           var width = $(window).width() - 80;
-           var height = $(window).height() - 80;
-           canvas.width = width;
-           canvas.height = height;
-           var ctx = canvas.getContext("2d");
-           var sys = arbor.ParticleSystem(width, height, 0.5);
-           sys.parameters({gravity:true});
+            var canvas = $("#viewport").get(0);
+            var width = $(window).width() - 80;
+            var height = $(window).height() - 80;
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext("2d");
+            var sys = arbor.ParticleSystem(width, height, 0.5);
+            sys.parameters({gravity:true});
 
-
-   var edges = data.edges;
-
-   var renderer = viz(ctx, sys, $, canvas, data);
-   sys.renderer = renderer;
-
-   for (var i = 0; i < edges.length; i++) {
-      sys.addEdge(edges[i].parent, edges[i].file);
-   }
-
+            var edges = data.edges;
+	    
+            var renderer = viz(ctx, sys, $, canvas, data);
+	    sys.renderer = renderer;
+	    
+	    for (var key in edges) {
+		if (edges.hasOwnProperty(key)) {
+		    sys.addEdge(edges[key].parent, edges[key].file);
+		}
+	    }
         },
         // execute this callback if there was a problem
         function (ex) {
