@@ -27,19 +27,23 @@ define([], function() {
 	    },
 
 	    findNode : function(data, name) {
-		return data[name];
+		var nodeInfo = data[name];
+		if (nodeInfo === undefined) {
+		    nodeInfo = {};
+		    nodeInfo.info = {};
+		    nodeInfo.info.lines = [[0, 4], [0, 4]];
+		    nodeInfo.type = 'dir';
+		}
+
+		return nodeInfo;
 	    },
 
 	    drawNode : function(node, pt) {
 		var edges = that.data.edges;
 		var n = that.findNode(edges, node.name);
 
-		var layout = [[0, 4], [0, 4]];
-		ctx.fillStyle = 'black';
-		if (n !== undefined) {
-		    layout = n.info.lines;
-		    ctx.fillStyle = (n.type === 'dir') ? "orange" : "black"
-		} 
+		var layout = n.info.lines;
+		ctx.fillStyle = (n.type === 'dir') ? "orange" : "black"
 		
 		var lineHeight = 1;
 		for (var i = 0; i < layout.length; i++) {
