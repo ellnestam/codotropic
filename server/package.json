@@ -29,7 +29,8 @@
     },
     "dependencies": {
 	"q": "*",
-	"ncp": "*"
+	"ncp": "*",
+	"optimist": "*"
     },
     "devDependencies": {
 	"grunt-contrib-jshint": "~0.6.4",

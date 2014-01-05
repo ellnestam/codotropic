@@ -4,6 +4,7 @@ var fs = require('fs');
 var q = require('q');
 var copy = require('ncp');
 var p = require('path');
+var opt = require('optimist');
 
 var repo = require('./source/repo.js');
 var writer = require('./source/writer.js');
@@ -20,19 +21,19 @@ var codo = {
 	    console.log('');
 	} else {
 	    var codoBinPath = args[1];
-	    var dest = args[3];
+	    var dest = opt.argv._[1];
 	    var sample_source = p.resolve(p.dirname(codoBinPath), '../../sample');
 
 	    var setup = codo.setupDir(copy.ncp, sample_source, dest);
 
 	    console.log('Working ...');
-	    
-	    var keepHidden = (args[5] !== undefined && args[5] === '--keep-hidden') || false;
+
+	    var keepHidden = (opt.argv['keep-hidden']) ? true : false;
 
 	    setup.then(function() {
-		var dirToRead = args[2];
+		var dirToRead = opt.argv._[0];
 		var read = repo.scan(dirToRead, textInfo);
-		read.then(codo.collect(p.join(dest, '/js/app/data.js'), args[4], keepHidden), 
+		read.then(codo.collect(p.join(dest, '/js/app/data.js'), opt.argv._[2], keepHidden), 
 			  codo.error)
 		    .done();
 	    });
@@ -82,6 +83,9 @@ var codo = {
 	    for (var i = 0; i < filtered.length; i++) {
 		var item = filtered[i];
 		var color = (item.type === 'dir') ? 'orange' : 'black';
+		if (item.file.toLowerCase().indexOf('jquery') > 0) {
+		    color = 'red';
+		}
 		nodes[item.file] = {file: item.file, type: item.type, parent: item.parent, info: item.info, color: color};
 	    }
 
