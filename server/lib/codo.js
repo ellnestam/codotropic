@@ -33,7 +33,7 @@ var codo = {
 	    setup.then(function() {
 		var dirToRead = opt.argv._[0];
 		var read = repo.scan(dirToRead, textInfo);
-		read.then(codo.collect(p.join(dest, '/js/app/data.js'), opt.argv._[2], keepHidden), 
+		read.then(codo.collect(p.join(dest, '/js/app/data.js'), opt.argv._[2], opt.argv), 
 			  codo.error)
 		    .done();
 	    });
@@ -63,8 +63,7 @@ var codo = {
 	return str.indexOf(substring) === -1;
     },
 
-
-    collect : function(fileName, suffix, keepHidden) {
+    collect : function(fileName, suffix, options) {
 	return function(d) {
 	    var promises = d;
 
@@ -72,12 +71,20 @@ var codo = {
 		return obj.type === 'dir' || codo.endsWith(obj.file, suffix);
 	    });
 
-	    if (!keepHidden) {
+	    if (!opt.argv['keep-hidden']) {
 		console.log('Removing dirs that starts with a dot. Disable this with --keep-hidden');
 		filtered = filtered.filter(function(obj) {
 		    return codo.notContains(obj.file, '/.')
 		});
 	    }
+
+	    if (!opt.argv['keep-node-modules']) {
+		console.log('Removing node_modules dir. Disable this with --keep-node-modules');
+		filtered = filtered.filter(function(obj) {
+		    return codo.notContains(obj.file, 'node_modules')
+		});
+	    }
+
 
 	    var nodes = {};
 	    for (var i = 0; i < filtered.length; i++) {
